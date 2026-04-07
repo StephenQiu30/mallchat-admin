@@ -30,18 +30,7 @@ const ViewUserModal: React.FC<Props> = (props) => {
       valueEnum: userRole,
     },
     { title: '手机号', dataIndex: 'userPhone' },
-    {
-      title: 'GitHub 账号',
-      dataIndex: 'githubLogin',
-      render: (_, record) =>
-        record.githubLogin ? (
-          <a href={record.githubUrl} target="_blank" rel="noreferrer">
-            {record.githubLogin}
-          </a>
-        ) : (
-          '-'
-        ),
-    },
+    { title: '邮箱', dataIndex: 'userEmail' },
     { title: '个人简介', dataIndex: 'userProfile', span: 2 },
     { title: '最后登录 IP', dataIndex: 'lastLoginIp' },
     { title: '最后登录时间', dataIndex: 'lastLoginTime', valueType: 'dateTime' },

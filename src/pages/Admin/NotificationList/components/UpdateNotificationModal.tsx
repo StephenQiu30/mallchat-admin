@@ -78,6 +78,23 @@ const UpdateNotificationModal: React.FC<Props> = (props) => {
         rules={[{ required: true, message: '请输入内容' }]}
       />
       <ProFormSelect
+        name="type"
+        label="通知类型"
+        options={[
+          { label: '系统通知', value: 'system' },
+          { label: '用户通知', value: 'user' },
+          { label: '评论通知', value: 'comment' },
+          { label: '点赞通知', value: 'like' },
+          { label: '关注通知', value: 'follow' },
+          { label: '全员广播', value: 'broadcast' },
+        ]}
+      />
+      <ProFormText
+        name="contentUrl"
+        label="跳转链接"
+        placeholder="请输入跳转链接"
+      />
+      <ProFormSelect
         name="relatedType"
         label="关联类型"
         options={[

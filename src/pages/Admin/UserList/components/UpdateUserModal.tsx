@@ -132,6 +132,17 @@ const UpdateUserModal: React.FC<Props> = (props) => {
         valueEnum={userRole}
         rules={[{ required: true, message: '请选择权限' }]}
       />
+      <ProFormText
+        name="userEmail"
+        label="邮箱"
+        placeholder="请输入邮箱"
+        rules={[
+          {
+            type: 'email',
+            message: '请输入正确的邮箱格式',
+          },
+        ]}
+      />
     </ModalForm>
   );
 };

@@ -15,6 +15,20 @@ export default [
     access: 'canAdmin',
   },
   {
+    name: '聊天室管理',
+    path: '/admin/chat_room',
+    component: './Admin/ChatRoomList',
+    icon: 'GroupOutlined',
+    access: 'canAdmin',
+  },
+  {
+    name: '好友申请管理',
+    path: '/admin/friend_apply',
+    component: './Admin/FriendApplyList',
+    icon: 'UsergroupAddOutlined',
+    access: 'canAdmin',
+  },
+  {
     name: 'AI 对话管理',
     path: '/admin/ai_chat',
     component: './Admin/AIChatRecordList',

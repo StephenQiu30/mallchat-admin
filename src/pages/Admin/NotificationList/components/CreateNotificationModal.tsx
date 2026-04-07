@@ -22,7 +22,6 @@ const CreateNotificationModal: React.FC<Props> = (props) => {
         try {
           const res = await addNotification({
             ...values,
-            target: 'all',
           });
           if (res.code === 0) {
             message.success('通知发送成功');
@@ -50,14 +49,25 @@ const CreateNotificationModal: React.FC<Props> = (props) => {
       <ProFormText
         name="title"
         label="通知标题"
-        placeholder="请输入跨系统广播的标题"
+        placeholder="请输入通知标题"
         rules={[{ required: true, message: '请输入标题' }]}
       />
       <ProFormTextArea
         name="content"
         label="通知内容"
-        placeholder="请输入广播的具体内容"
+        placeholder="请输入通知的具体内容"
         rules={[{ required: true, message: '请输入内容' }]}
+      />
+      <ProFormText
+        name="contentUrl"
+        label="跳转链接"
+        placeholder="请输入点击通知后的跳转链接"
+      />
+      <ProFormText
+        name="target"
+        label="发送目标"
+        initialValue="all"
+        placeholder="默认 all (全员广播)"
       />
     </ModalForm>
   );

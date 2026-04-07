@@ -11,9 +11,7 @@ export async function uploadFile(
 ) {
   return request<API.BaseResponseFileVO>('/file/upload', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: {},
     params: {
       ...params,
     },

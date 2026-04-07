@@ -112,19 +112,6 @@ const UserList: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: 'GitHub 账号',
-      dataIndex: 'githubLogin',
-      hideInSearch: true,
-      render: (_, record) =>
-        record.githubLogin ? (
-          <a href={record.githubUrl} target="_blank" rel="noreferrer">
-            {record.githubLogin}
-          </a>
-        ) : (
-          '-'
-        ),
-    },
-    {
       title: '简介',
       dataIndex: 'userProfile',
       valueType: 'text',
@@ -136,6 +123,13 @@ const UserList: React.FC = () => {
       dataIndex: 'userRole',
       valueType: 'select',
       valueEnum: userRole,
+    },
+    {
+      title: '最后登录 IP',
+      dataIndex: 'lastLoginIp',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '最后登录时间',
