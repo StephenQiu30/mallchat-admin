@@ -87,7 +87,7 @@ const BasicSettings: React.FC = () => {
           {
             bizType: FileUploadBiz.USER_AVATAR as any,
           },
-          file as any,
+          formData,
         );
         if (res.code === 0 && res.data?.url) {
           const newAvatar = res.data.url;
