@@ -35,6 +35,27 @@ export default [
     icon: 'MessageOutlined',
     access: 'canAdmin',
   },
+  {
+    name: '群组管理',
+    path: '/admin/group',
+    component: './Admin/GroupList',
+    icon: 'TeamOutlined',
+    access: 'canAdmin',
+  },
+  {
+    name: '数据统计',
+    path: '/admin/statistics',
+    component: './Admin/Statistics',
+    icon: 'BarChartOutlined',
+    access: 'canAdmin',
+  },
+  {
+    name: '日志总览',
+    path: '/admin/loglist',
+    component: './Admin/LogList',
+    icon: 'FileTextOutlined',
+    access: 'canAdmin',
+  },
 
   {
     name: '日志管理',
