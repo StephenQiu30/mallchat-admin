@@ -1,13 +1,13 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { ActionType, FooterToolbar, ProColumns, ProTable } from '@ant-design/pro-components';
 
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
+import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import { userRole } from '@/enums/UserRoleEnum';
+import { userRole, UserRoleEnum } from '@/enums/UserRoleEnum';
 import CreateUserModal from '@/pages/Admin/UserList/components/CreateUserModal';
 import UpdateUserModal from '@/pages/Admin/UserList/components/UpdateUserModal';
 import ViewUserModal from '@/pages/Admin/UserList/components/ViewUserModal';
-import { deleteUser, listUserByPage } from '@/services/user/userController';
+import { deleteUser, listUserByPage, updateUser } from '@/services/user/userController';
 
 /**
  * 用户管理列表
@@ -39,6 +39,32 @@ const UserList: React.FC = () => {
       }
     } catch (error: any) {
       message.error(`删除报错: ${error.message}`);
+    } finally {
+      hide();
+    }
+  };
+
+  /**
+   * 封禁/解封用户
+   * @param row
+   * @param ban true=封禁, false=解封
+   */
+  const handleToggleBan = async (row: API.User, ban: boolean) => {
+    if (!row?.id) return;
+    const hide = message.loading(ban ? '正在封禁' : '正在解封');
+    try {
+      const res = await updateUser({
+        id: row.id,
+        userRole: ban ? UserRoleEnum.BAN : UserRoleEnum.USER,
+      });
+      if (res.code === 0) {
+        message.success(ban ? '封禁成功' : '解封成功');
+        actionRef.current?.reload();
+      } else {
+        message.error(`${ban ? '封禁' : '解封'}失败: ${res.message}`);
+      }
+    } catch (error: any) {
+      message.error(`${ban ? '封禁' : '解封'}报错: ${error.message}`);
     } finally {
       hide();
     }
