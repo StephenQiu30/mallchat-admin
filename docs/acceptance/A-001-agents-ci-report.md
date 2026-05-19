@@ -30,7 +30,7 @@ pnpm run tsc
 
 1. 仓库结构与规范入口校验已通过。
 2. `pnpm run tsc` 已通过。
-3. CI 已从不存在的 `npm test` 改为 `pnpm run tsc`，避免提交后 GitHub Actions 因无效命令失败。
+3. CI 已从不存在的 `npm test` 改为固定 pnpm 10.20.0 后执行 `pnpm run tsc`，避免提交后 GitHub Actions 因无效命令失败或 pnpm 版本漂移失败。
 4. 本次未修改管理后台业务代码，未新增业务测试。
 
 ## 4. 残余风险
