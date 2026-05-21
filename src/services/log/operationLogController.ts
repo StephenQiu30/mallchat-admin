@@ -7,7 +7,7 @@ export async function addOperationLog(
   body: API.OperationLogAddRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean>('/log/operation/add', {
+  return request<API.BaseResponseLogOperationResultVO>('/log/operation/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -18,11 +18,8 @@ export async function addOperationLog(
 }
 
 /** 删除操作日志 删除指定操作日志（仅管理员） POST /log/operation/delete */
-export async function deleteOperationLog(
-  body: API.DeleteRequest,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponseBoolean>('/log/operation/delete', {
+export async function deleteOperationLog(body: API.LogIdRequest, options?: { [key: string]: any }) {
+  return request<API.BaseResponseLogOperationResultVO>('/log/operation/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

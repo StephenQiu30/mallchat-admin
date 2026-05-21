@@ -60,7 +60,7 @@ const ChatRoomList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       width: 80,
-      render: (_, record) => (
+      render: () => (
         <Space size="middle">
           <Typography.Link
             key="view"

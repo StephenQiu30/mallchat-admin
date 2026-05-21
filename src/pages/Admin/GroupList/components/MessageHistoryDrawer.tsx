@@ -24,9 +24,11 @@ const MessageHistoryDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => 
       setLoading(true);
       try {
         const res = await listHistoryMessages({
-          roomId,
-          lastMessageId,
-          limit: PAGE_SIZE,
+          request: {
+            roomId,
+            lastMessageId,
+            limit: PAGE_SIZE,
+          },
         });
         if (res.code === 0 && res.data) {
           const list = res.data as API.ChatMessageVO[];

@@ -1,6 +1,6 @@
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Tabs, Tag, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
+import { message, Popconfirm, Tabs, Typography } from 'antd';
+import React, { useRef } from 'react';
 import { listLogByPage, deleteOperationLog } from '@/services/log/operationLogController';
 import { listLogByPage2 } from '@/services/log/apiAccessLogController';
 import { listLogByPage1 } from '@/services/log/userLoginLogController';

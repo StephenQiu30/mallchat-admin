@@ -1,18 +1,25 @@
 declare namespace API {
-  type BaseResponseBoolean = {
-    /** 状态码 */
-    code?: number;
-    /** 数据 */
-    data?: boolean;
-    /** 消息 */
-    message?: string;
-  };
-
   type BaseResponseListUserVO = {
     /** 状态码 */
     code?: number;
     /** 数据 */
     data?: UserVO[];
+    /** 消息 */
+    message?: string;
+  };
+
+  type BaseResponseLoginUserVO = {
+    /** 状态码 */
+    code?: number;
+    data?: LoginUserVO;
+    /** 消息 */
+    message?: string;
+  };
+
+  type BaseResponsePageUserVO = {
+    /** 状态码 */
+    code?: number;
+    data?: PageUserVO;
     /** 消息 */
     message?: string;
   };
@@ -41,47 +48,6 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseLoginUserVO = {
-    /** 状态码 */
-    code?: number;
-    data?: LoginUserVO;
-    /** 消息 */
-    message?: string;
-  };
-
-  type BaseResponseLong = {
-    /** 状态码 */
-    code?: number;
-    /** 数据 */
-    data?: number;
-    /** 消息 */
-    message?: string;
-  };
-
-  type BaseResponsePageUser = {
-    /** 状态码 */
-    code?: number;
-    data?: PageUser;
-    /** 消息 */
-    message?: string;
-  };
-
-  type BaseResponsePageUserVO = {
-    /** 状态码 */
-    code?: number;
-    data?: PageUserVO;
-    /** 消息 */
-    message?: string;
-  };
-
-  type BaseResponseUser = {
-    /** 状态码 */
-    code?: number;
-    data?: User;
-    /** 消息 */
-    message?: string;
-  };
-
   type BaseResponseUserVO = {
     /** 状态码 */
     code?: number;
@@ -90,37 +56,16 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseWxLoginResponse = {
-    /** 状态码 */
-    code?: number;
-    data?: WxLoginResponse;
-    /** 消息 */
-    message?: string;
-  };
-
-  type checkParams = {
-    request: WxMpCheckRequest;
-  };
-
-  type checkWxLoginStatusParams = {
-    sceneId: string;
-  };
-
-  type DeleteRequest = {
-    /** id */
-    id: number;
-  };
-
   type getUserByIdParams = {
-    id: number;
+    userIdRequest: UserIdRequest;
   };
 
   type getUserVOByIdParams = {
-    id: number;
+    userIdRequest: UserIdRequest;
   };
 
   type getUserVOByIdsParams = {
-    ids: number[];
+    request: UserIdsRequest;
   };
 
   type LoginUserVO = {
@@ -153,20 +98,6 @@ declare namespace API {
     asc?: boolean;
   };
 
-  type PageUser = {
-    records?: User[];
-    total?: number;
-    size?: number;
-    current?: number;
-    orders?: OrderItem[];
-    optimizeCountSql?: PageUser;
-    searchCount?: PageUser;
-    optimizeJoinOfCountSql?: boolean;
-    maxLimit?: number;
-    countId?: string;
-    pages?: number;
-  };
-
   type PageUserVO = {
     records?: UserVO[];
     total?: number;
@@ -179,39 +110,6 @@ declare namespace API {
     maxLimit?: number;
     countId?: string;
     pages?: number;
-  };
-
-  type User = {
-    /** 用户ID */
-    id?: number;
-    /** 用户昵称 */
-    userName?: string;
-    /** 用户头像 */
-    userAvatar?: string;
-    /** 用户简介 */
-    userProfile?: string;
-    /** 用户角色：user/admin/ban */
-    userRole?: string;
-    /** 用户手机号 */
-    userPhone?: string;
-    /** 用户邮箱 */
-    userEmail?: string;
-    /** 微信公众号 OpenID */
-    mpOpenId?: string;
-    /** 微信 UnionID */
-    wxUnionId?: string;
-    /** 微信开放平台 OpenID */
-    wxOpenId?: string;
-    /** 最后登录时间 */
-    lastLoginTime?: string;
-    /** 最后登录IP */
-    lastLoginIp?: string;
-    /** 创建时间 */
-    createTime?: string;
-    /** 更新时间 */
-    updateTime?: string;
-    /** 是否删除 */
-    isDelete?: number;
   };
 
   type UserAddRequest = {
@@ -228,6 +126,18 @@ declare namespace API {
   type UserAdminStatusVO = {
     /** 是否管理员 */
     admin?: boolean;
+  };
+
+  type UserAppleLoginRequest = {
+    /** Apple Identity Token (JWT) */
+    identityToken: string;
+    /** Apple 用户标识 (User Identifier) */
+    userIdentifier: string;
+  };
+
+  type UserAppLoginRequest = {
+    /** 微信 App 登录 code */
+    code?: string;
   };
 
   type UserEditRequest = {
@@ -270,6 +180,16 @@ declare namespace API {
     id?: number;
   };
 
+  type UserMaLoginRequest = {
+    /** 微信小程序登录 code */
+    code?: string;
+  };
+
+  type UserOperationResultVO = {
+    /** 是否成功 */
+    success?: boolean;
+  };
+
   type UserQueryRequest = {
     /** 当前页号 */
     current?: number;
@@ -285,8 +205,6 @@ declare namespace API {
     notId?: number;
     /** 微信开放平台UnionID */
     wxUnionId?: string;
-    /** 公众号OpenID */
-    mpOpenId?: string;
     /** 用户昵称 */
     userName?: string;
     /** 用户角色 */
@@ -295,11 +213,6 @@ declare namespace API {
     userPhone?: string;
     /** 搜索文本 */
     searchText?: string;
-  };
-
-  type UserOperationResultVO = {
-    /** 是否成功 */
-    success?: boolean;
   };
 
   type UserUpdateRequest = {
@@ -338,23 +251,5 @@ declare namespace API {
     createTime?: string;
     /** 更新时间 */
     updateTime?: string;
-  };
-
-  type WxLoginResponse = {
-    /** 二维码 URL */
-    qrCodeUrl?: string;
-    /** 场景 ID */
-    sceneId?: string;
-  };
-
-  type WxMpCheckRequest = {
-    /** 时间戳 */
-    timestamp?: string;
-    /** 随机数 */
-    nonce?: string;
-    /** 签名 */
-    signature?: string;
-    /** 随机字符串 */
-    echostr?: string;
   };
 }

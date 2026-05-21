@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** 此处后端没有提供注释 POST /user/add */
+/** 创建用户 管理员手动创建新用户 POST /user/add */
 export async function addUser(body: API.UserAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseUserIdVO>('/user/add', {
     method: 'POST',
@@ -14,7 +14,7 @@ export async function addUser(body: API.UserAddRequest, options?: { [key: string
   });
 }
 
-/** 此处后端没有提供注释 POST /user/delete */
+/** 删除用户 删除指定 ID 的用户（仅本人或管理员） POST /user/delete */
 export async function deleteUser(body: API.UserIdRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseUserOperationResultVO>('/user/delete', {
     method: 'POST',
@@ -26,7 +26,7 @@ export async function deleteUser(body: API.UserIdRequest, options?: { [key: stri
   });
 }
 
-/** 此处后端没有提供注释 POST /user/edit */
+/** 编辑个人信息 当前登录用户编辑自己的个人资料 POST /user/edit */
 export async function editUser(body: API.UserEditRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseUserOperationResultVO>('/user/edit', {
     method: 'POST',
@@ -38,15 +38,18 @@ export async function editUser(body: API.UserEditRequest, options?: { [key: stri
   });
 }
 
-/** 此处后端没有提供注释 GET /user/get */
+/** 根据ID获取用户 根据用户ID获取用户详细信息（仅管理员） GET /user/get */
 export async function getUserById(
-  params: API.UserIdRequest,
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getUserByIdParams,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseUserVO>('/user/get', {
     method: 'GET',
     params: {
       ...params,
+      userIdRequest: undefined,
+      ...params['userIdRequest'],
     },
     ...(options || {}),
   });
@@ -60,29 +63,35 @@ export async function getLoginUser(options?: { [key: string]: any }) {
   });
 }
 
-/** 此处后端没有提供注释 GET /user/get/vo */
+/** 根据ID获取用户视图对象 根据用户ID获取用户脱敏后的视图对象 GET /user/get/vo */
 export async function getUserVoById(
-  params: API.UserIdRequest,
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getUserVOByIdParams,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseUserVO>('/user/get/vo', {
     method: 'GET',
     params: {
       ...params,
+      userIdRequest: undefined,
+      ...params['userIdRequest'],
     },
     ...(options || {}),
   });
 }
 
-/** 此处后端没有提供注释 GET /user/get/vo/batch */
+/** 批量获取用户视图对象 根据用户ID列表批量获取用户脱敏后的视图对象 GET /user/get/vo/batch */
 export async function getUserVoByIds(
-  params: API.UserIdsRequest,
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getUserVOByIdsParams,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseListUserVO>('/user/get/vo/batch', {
     method: 'GET',
     params: {
       ...params,
+      request: undefined,
+      ...params['request'],
     },
     ...(options || {}),
   });
@@ -96,7 +105,7 @@ export async function isAdmin(options?: { [key: string]: any }) {
   });
 }
 
-/** 此处后端没有提供注释 POST /user/list/page */
+/** 分页获取用户列表 管理员分页查询原始用户信息 POST /user/list/page */
 export async function listUserByPage(body: API.UserQueryRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponsePageUserVO>('/user/list/page', {
     method: 'POST',
@@ -108,7 +117,7 @@ export async function listUserByPage(body: API.UserQueryRequest, options?: { [ke
   });
 }
 
-/** 此处后端没有提供注释 POST /user/list/page/vo */
+/** 分页获取用户封装列表 分页获取脱敏后的用户信息列表 POST /user/list/page/vo */
 export async function listUserVoByPage(
   body: API.UserQueryRequest,
   options?: { [key: string]: any },
@@ -123,7 +132,37 @@ export async function listUserVoByPage(
   });
 }
 
-/** 邮箱登录 通过邮箱验证码进行登录或注册 POST /user/login/email */
+/** 微信 App 登录 通过微信 App code 进行登录或注册 POST /user/login/app */
+export async function userLoginByApp(
+  body: API.UserAppLoginRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseLoginUserVO>('/user/login/app', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** Apple 登录 通过 Apple 授权信息进行登录或注册 POST /user/login/apple */
+export async function userLoginByApple(
+  body: API.UserAppleLoginRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseLoginUserVO>('/user/login/apple', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 邮箱登录 通过邮箱和验证码进行登录或注册 POST /user/login/email */
 export async function userLoginByEmail(
   body: API.UserEmailLoginRequest,
   options?: { [key: string]: any },
@@ -138,43 +177,32 @@ export async function userLoginByEmail(
   });
 }
 
-/** 发送邮箱验证码 向指定邮箱发送 6 位验证码 POST /user/login/email/code */
+/** 发送邮箱验证码 向指定邮箱发送 6 位数登录验证码 POST /user/login/email/code */
 export async function sendEmailCode(
   body: API.UserEmailCodeRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseUserOperationResultVO>(
-    '/user/login/email/code',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: body,
-      ...(options || {}),
+  return request<API.BaseResponseUserOperationResultVO>('/user/login/email/code', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
-}
-
-/** 此处后端没有提供注释 GET /user/login/wx/qrcode */
-export async function getWxLoginQrCode(options?: { [key: string]: any }) {
-  return request<API.BaseResponseWxLoginResponse>('/user/login/wx/qrcode', {
-    method: 'GET',
+    data: body,
     ...(options || {}),
   });
 }
 
-/** 检查微信登录状态 轮询检查微信扫码登录状态 GET /user/login/wx/status */
-export async function checkWxLoginStatus(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.checkWxLoginStatusParams,
+/** 微信小程序登录 通过微信小程序 code 进行登录或注册 POST /user/login/ma */
+export async function userLoginByMa(
+  body: API.UserMaLoginRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseLoginUserVO>('/user/login/wx/status', {
-    method: 'GET',
-    params: {
-      ...params,
+  return request<API.BaseResponseLoginUserVO>('/user/login/ma', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   });
 }
@@ -187,7 +215,7 @@ export async function userLogout(options?: { [key: string]: any }) {
   });
 }
 
-/** 此处后端没有提供注释 POST /user/update */
+/** 更新用户 管理员后台更新用户信息 POST /user/update */
 export async function updateUser(body: API.UserUpdateRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseUserOperationResultVO>('/user/update', {
     method: 'POST',

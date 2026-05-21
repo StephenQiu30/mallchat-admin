@@ -1,4 +1,9 @@
 declare namespace API {
+  type AiChatRecordDeleteRequest = {
+    /** 记录ID */
+    id: number;
+  };
+
   type AiChatRecordQueryRequest = {
     /** 当前页号 */
     current?: number;
@@ -14,11 +19,6 @@ declare namespace API {
     modelType?: string;
     /** 搜索词 (匹配消息内容或响应) */
     searchText?: string;
-  };
-
-  type AiChatRecordDeleteRequest = {
-    /** 对话记录ID */
-    id: number;
   };
 
   type AiChatRecordVO = {
@@ -42,7 +42,7 @@ declare namespace API {
 
   type AiChatRequest = {
     /** 问题内容 */
-    message?: string;
+    message: string;
     /** 模型类型 (dashscope: 通义千问, ollama: 本地模型) */
     modelType?: string;
     /** 会话 id */
@@ -90,15 +90,6 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseBoolean = {
-    /** 状态码 */
-    code?: number;
-    /** 数据 */
-    data?: boolean;
-    /** 消息 */
-    message?: string;
-  };
-
   type BaseResponseListAiModelVO = {
     /** 状态码 */
     code?: number;
@@ -114,11 +105,6 @@ declare namespace API {
     data?: PageAiChatRecordVO;
     /** 消息 */
     message?: string;
-  };
-
-  type DeleteRequest = {
-    /** id */
-    id: number;
   };
 
   type OrderItem = {

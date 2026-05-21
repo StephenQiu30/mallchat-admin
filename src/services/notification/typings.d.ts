@@ -1,36 +1,40 @@
 declare namespace API {
-  type BaseResponseBoolean = {
+  type BaseResponseNotificationBatchOperationResultVO = {
     /** 状态码 */
     code?: number;
-    /** 数据 */
-    data?: boolean;
+    data?: NotificationBatchOperationResultVO;
     /** 消息 */
     message?: string;
   };
 
-  type BaseResponseInteger = {
+  type BaseResponseNotificationIdListVO = {
     /** 状态码 */
     code?: number;
-    /** 数据 */
-    data?: number;
+    data?: NotificationIdListVO;
     /** 消息 */
     message?: string;
   };
 
-  type BaseResponseListLong = {
+  type BaseResponseNotificationIdVO = {
     /** 状态码 */
     code?: number;
-    /** 数据 */
-    data?: number[];
+    data?: NotificationIdVO;
     /** 消息 */
     message?: string;
   };
 
-  type BaseResponseLong = {
+  type BaseResponseNotificationOperationResultVO = {
     /** 状态码 */
     code?: number;
-    /** 数据 */
-    data?: number;
+    data?: NotificationOperationResultVO;
+    /** 消息 */
+    message?: string;
+  };
+
+  type BaseResponseNotificationUnreadCountVO = {
+    /** 状态码 */
+    code?: number;
+    data?: NotificationUnreadCountVO;
     /** 消息 */
     message?: string;
   };
@@ -43,14 +47,6 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponsePageNotification = {
-    /** 状态码 */
-    code?: number;
-    data?: PageNotification;
-    /** 消息 */
-    message?: string;
-  };
-
   type BaseResponsePageNotificationVO = {
     /** 状态码 */
     code?: number;
@@ -59,44 +55,8 @@ declare namespace API {
     message?: string;
   };
 
-  type DeleteRequest = {
-    /** id */
-    id: number;
-  };
-
   type getNotificationVOByIdParams = {
-    id: number;
-  };
-
-  type Notification = {
-    /** 通知ID */
-    id?: number;
-    /** 通知标题 */
-    title?: string;
-    /** 通知内容 */
-    content?: string;
-    /** 通知类型（system-系统通知，user-用户通知，comment-评论通知，like-点赞通知，follow-关注通知，broadcast-全员广播） */
-    type?: string;
-    /** 业务幂等ID */
-    bizId?: string;
-    /** 接收用户ID */
-    userId?: number;
-    /** 关联对象ID */
-    relatedId?: number;
-    /** 关联对象类型 */
-    relatedType?: string;
-    /** 是否已读 */
-    isRead?: number;
-    /** 状态（0-正常，1-停用） */
-    status?: number;
-    /** 跳转链接 */
-    contentUrl?: string;
-    /** 创建时间 */
-    createTime?: string;
-    /** 更新时间 */
-    updateTime?: string;
-    /** 是否删除 */
-    isDelete?: number;
+    request: NotificationIdRequest;
   };
 
   type NotificationAddRequest = {
@@ -115,9 +75,55 @@ declare namespace API {
     ids: number[];
   };
 
+  type NotificationBatchOperationResultVO = {
+    /** 请求数量 */
+    requestedCount?: number;
+    /** 实际影响数量 */
+    affectedCount?: number;
+  };
+
   type NotificationBatchReadRequest = {
     /** 通知ID列表 */
     ids: number[];
+  };
+
+  type NotificationCreateRequest = {
+    /** 通知标题 */
+    title: string;
+    /** 通知内容 */
+    content: string;
+    /** 通知类型 */
+    type: string;
+    /** 业务幂等ID */
+    bizId?: string;
+    /** 接收用户ID */
+    userId: number;
+    /** 关联对象ID */
+    relatedId?: number;
+    /** 关联对象类型 */
+    relatedType?: string;
+    /** 跳转链接 */
+    contentUrl?: string;
+  };
+
+  type NotificationIdListVO = {
+    /** 通知ID列表 */
+    ids?: number[];
+  };
+
+  type NotificationIdRequest = {
+    /** 通知ID */
+    id: number;
+  };
+
+  type NotificationIdVO = {
+    /** 通知ID */
+    id?: number;
+  };
+
+  type NotificationOperationResultVO = {
+    /** 是否成功 */
+    success?: boolean;
   };
 
   type NotificationQueryRequest = {
@@ -148,6 +154,11 @@ declare namespace API {
   type NotificationReadRequest = {
     /** 通知ID */
     id?: number;
+  };
+
+  type NotificationUnreadCountVO = {
+    /** 未读数量 */
+    count?: number;
   };
 
   type NotificationUpdateRequest = {
@@ -202,20 +213,6 @@ declare namespace API {
   type OrderItem = {
     column?: string;
     asc?: boolean;
-  };
-
-  type PageNotification = {
-    records?: Notification[];
-    total?: number;
-    size?: number;
-    current?: number;
-    orders?: OrderItem[];
-    optimizeCountSql?: PageNotification;
-    searchCount?: PageNotification;
-    optimizeJoinOfCountSql?: boolean;
-    maxLimit?: number;
-    countId?: string;
-    pages?: number;
   };
 
   type PageNotificationVO = {

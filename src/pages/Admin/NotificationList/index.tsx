@@ -1,5 +1,5 @@
 import { ActionType, FooterToolbar, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Badge, Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
+import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
   batchDeleteNotification,
@@ -22,14 +22,14 @@ const NotificationList: React.FC = () => {
   // Modal 状态管理
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
-  const [currentRow, setCurrentRow] = useState<API.Notification>();
-  const [selectedRowsState, setSelectedRows] = useState<API.Notification[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.NotificationVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.NotificationVO[]>([]);
 
   /**
    * 删除节点
    * @param row
    */
-  const handleDelete = async (row: API.Notification) => {
+  const handleDelete = async (row: API.NotificationVO) => {
     if (!row?.id) return;
     const hide = message.loading('正在删除');
     try {
@@ -51,7 +51,7 @@ const NotificationList: React.FC = () => {
    * 批量删除节点
    * @param selectedRows
    */
-  const handleBatchDelete = async (selectedRows: API.Notification[]) => {
+  const handleBatchDelete = async (selectedRows: API.NotificationVO[]) => {
     if (!selectedRows?.length) return;
     const hide = message.loading('正在删除');
     try {
@@ -76,7 +76,7 @@ const NotificationList: React.FC = () => {
    * 标记已读
    * @param row
    */
-  const handleMarkRead = async (row: API.Notification) => {
+  const handleMarkRead = async (row: API.NotificationVO) => {
     if (!row?.id) return;
     const hide = message.loading('正在标记');
     try {
@@ -98,7 +98,7 @@ const NotificationList: React.FC = () => {
    * 批量标记已读
    * @param selectedRows
    */
-  const handleBatchMarkRead = async (selectedRows: API.Notification[]) => {
+  const handleBatchMarkRead = async (selectedRows: API.NotificationVO[]) => {
     if (!selectedRows?.length) return;
     const hide = message.loading('正在标记');
     try {
@@ -142,7 +142,7 @@ const NotificationList: React.FC = () => {
   /**
    * 表格列定义
    */
-  const columns: ProColumns<API.Notification>[] = [
+  const columns: ProColumns<API.NotificationVO>[] = [
     {
       title: '序号',
       dataIndex: 'id',
@@ -259,7 +259,7 @@ const NotificationList: React.FC = () => {
 
   return (
     <>
-      <ProTable<API.Notification, API.NotificationQueryRequest>
+      <ProTable<API.NotificationVO, API.NotificationQueryRequest>
         headerTitle="通知管理"
         actionRef={actionRef}
         rowKey="id"

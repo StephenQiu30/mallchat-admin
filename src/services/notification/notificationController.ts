@@ -2,12 +2,12 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** 创建通知 管理员向特定目标发送通知 POST /notification/add */
+/** 批量发布通知 管理员向全员、特定角色或指定用户组批量下发实时通知 POST /notification/add */
 export async function addNotification(
   body: API.NotificationAddRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseListLong>('/notification/add', {
+  return request<API.BaseResponseNotificationIdListVO>('/notification/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function batchDeleteNotification(
   body: API.NotificationBatchDeleteRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseInteger>('/notification/batch/delete', {
+  return request<API.BaseResponseNotificationBatchOperationResultVO>('/notification/batch/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export async function batchMarkNotificationRead(
   body: API.NotificationBatchReadRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseInteger>('/notification/batch/read', {
+  return request<API.BaseResponseNotificationBatchOperationResultVO>('/notification/batch/read', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -49,10 +49,10 @@ export async function batchMarkNotificationRead(
 
 /** 删除通知 删除指定通知，仅本人或管理员可操作 POST /notification/delete */
 export async function deleteNotification(
-  body: API.DeleteRequest,
+  body: API.NotificationIdRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean>('/notification/delete', {
+  return request<API.BaseResponseNotificationOperationResultVO>('/notification/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -72,7 +72,24 @@ export async function getNotificationVoById(
     method: 'GET',
     params: {
       ...params,
+      request: undefined,
+      ...params['request'],
     },
+    ...(options || {}),
+  });
+}
+
+/** 创建业务通知 供内部业务服务创建点赞、评论等业务通知 POST /notification/internal/add */
+export async function addBusinessNotification(
+  body: API.NotificationCreateRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseNotificationIdVO>('/notification/internal/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -82,7 +99,7 @@ export async function listNotificationByPage(
   body: API.NotificationQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePageNotification>('/notification/list/page', {
+  return request<API.BaseResponsePageNotificationVO>('/notification/list/page', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -127,7 +144,7 @@ export async function markNotificationRead(
   body: API.NotificationReadRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean>('/notification/read', {
+  return request<API.BaseResponseNotificationOperationResultVO>('/notification/read', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -137,9 +154,9 @@ export async function markNotificationRead(
   });
 }
 
-/** 全部标记已读 将当前用户的所有未读通知标记为已读 POST /notification/read/all */
+/** 全量已读 一键将当前用户名下的所有未读状态通知更新为已读状态 POST /notification/read/all */
 export async function markAllNotificationRead(options?: { [key: string]: any }) {
-  return request<API.BaseResponseBoolean>('/notification/read/all', {
+  return request<API.BaseResponseNotificationOperationResultVO>('/notification/read/all', {
     method: 'POST',
     ...(options || {}),
   });
@@ -147,7 +164,7 @@ export async function markAllNotificationRead(options?: { [key: string]: any }) 
 
 /** 获取未读通知数 获取当前用户未读通知的总数 GET /notification/unread/count */
 export async function getNotificationUnreadCount(options?: { [key: string]: any }) {
-  return request<API.BaseResponseLong>('/notification/unread/count', {
+  return request<API.BaseResponseNotificationUnreadCountVO>('/notification/unread/count', {
     method: 'GET',
     ...(options || {}),
   });
@@ -158,7 +175,7 @@ export async function updateNotification(
   body: API.NotificationUpdateRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean>('/notification/update', {
+  return request<API.BaseResponseNotificationOperationResultVO>('/notification/update', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -2,8 +2,8 @@ import { Footer } from '@/components';
 import { LoginForm, ProFormCaptcha, ProFormText } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
 import { MailOutlined } from '@ant-design/icons';
-import { Button, Divider, Image, message, Space, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Divider, Image, message, Typography } from 'antd';
+import React from 'react';
 import { createStyles } from 'antd-style';
 import { STEPHEN_SUBTITLE, STEPHEN_TITLE } from '@/constants';
 import { sendEmailCode, userLoginByEmail } from '@/services/user/userController';
@@ -40,16 +40,8 @@ const useStyles = createStyles(({ token }) => {
  * @constructor
  */
 const Login: React.FC = () => {
-  const { initialState, setInitialState } = useModel('@@initialState');
-  const [redirected, setRedirected] = useState(false);
+  const { setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
-
-  useEffect(() => {
-    if (redirected) {
-      const urlParams = new URL(window.location.href).searchParams;
-      history.push(urlParams.get('redirect') || '/');
-    }
-  }, [redirected]);
 
   /**
    * 登录成功后的处理
