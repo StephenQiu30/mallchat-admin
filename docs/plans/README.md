@@ -19,3 +19,9 @@
 ## 命名建议
 
 使用 `序号-主题-计划.md`，例如 `001-docs目录治理计划.md`。
+
+## 文档清单
+
+| 文档 | 说明 |
+| --- | --- |
+| [PL-001-admin-antd-pro-optimization-plan.md](./PL-001-admin-antd-pro-optimization-plan.md) | 管理后台 Ant Design Pro 优化、OpenAPI 生成服务同步和分 feature Issue 编排计划 |
