@@ -31,3 +31,4 @@ git diff --check
 node scripts/verify-admin-foundation.cjs
 node scripts/verify-admin-user-relation.cjs
 node scripts/verify-admin-enum-display.cjs
+node scripts/verify-admin-chat-governance.cjs
