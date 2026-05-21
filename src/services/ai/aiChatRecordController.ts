@@ -4,10 +4,10 @@ import { request } from '@umijs/max';
 
 /** 删除对话记录 根据 ID 删除指定的对话记录，仅本人可删除 POST /ai/record/delete */
 export async function deleteAiChatRecord(
-  body: API.DeleteRequest,
+  body: API.AiChatRecordDeleteRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean>('/ai/record/delete', {
+  return request<API.BaseResponseAiOperationResultVO>('/ai/record/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
