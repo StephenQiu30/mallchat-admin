@@ -4,17 +4,14 @@ import {
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
-  ProFormUploadDragger,
 } from '@ant-design/pro-components';
-import { message, UploadProps } from 'antd';
+import { message } from 'antd';
 import React, { useState } from 'react';
 import { userRole } from '@/enums/UserRoleEnum';
-import { FileUploadBiz } from '@/enums/FileUploadBizEnum';
 import { updateUser } from '@/services/user/userController';
-import { uploadFile } from '@/services/file/fileController';
 
 interface Props {
-  oldData?: API.User;
+  oldData?: API.UserVO;
   onCancel: () => void;
   onSubmit: (values?: API.UserUpdateRequest) => void;
   visible: boolean;
@@ -37,42 +34,6 @@ const UpdateUserModal: React.FC<Props> = (props) => {
       setUserAvatar(oldData.userAvatar);
     }
   }, [visible, oldData, form]);
-
-  /**
-   * 用户更新头像
-   */
-  const uploadProps: UploadProps = {
-    name: 'file',
-    multiple: false,
-    maxCount: 1,
-    customRequest: async (options: any) => {
-      const { onSuccess, onError, file } = options;
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        const res = await uploadFile(
-          {
-            bizType: FileUploadBiz.USER_AVATAR as any,
-          },
-          file as any,
-        );
-        if (res.code === 0 && res.data?.url) {
-          onSuccess(res.data);
-          setUserAvatar(res.data.url);
-          message.success('头像上传成功');
-        } else {
-          onError(new Error(res.message));
-          message.error(`头像上传失败: ${res.message}`);
-        }
-      } catch (error: any) {
-        onError(error);
-        message.error(`文件上传失败: ${error.message}`);
-      }
-    },
-    onRemove() {
-      setUserAvatar(undefined);
-    },
-  };
 
   if (!oldData) {
     return null;

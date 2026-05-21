@@ -1,5 +1,5 @@
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Space, Typography, message, Avatar, Tag, Popconfirm, Button } from 'antd';
+import { Space, Typography, message, Avatar, Popconfirm } from 'antd';
 import React, { useRef } from 'react';
 import { approveFriend, listFriendApply } from '@/services/chat/chatFriendApplyController';
 import { ChatFriendApplyStatusEnumMap, ChatFriendApplyStatusEnum } from '@/enums/ChatFriendApplyStatusEnum';
@@ -116,8 +116,8 @@ const FriendApplyList: React.FC = () => {
       request={async (params) => {
         const { data, code } = await listFriendApply({
           current: params.current,
-          size: params.pageSize,
-        } as API.listFriendApplyParams);
+          pageSize: params.pageSize,
+        });
         return {
           success: code === 0,
           data: data?.records || [],

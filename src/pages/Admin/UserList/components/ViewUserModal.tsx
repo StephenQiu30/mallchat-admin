@@ -4,9 +4,9 @@ import { ProDescriptions, ProDescriptionsItemProps } from '@ant-design/pro-compo
 import { userRole } from '@/enums/UserRoleEnum';
 
 interface Props {
-  user: API.User;
+  user: API.UserVO;
   children?: React.ReactElement;
-  columns?: ProDescriptionsItemProps<API.User>[];
+  columns?: ProDescriptionsItemProps<API.UserVO>[];
 }
 
 /**
@@ -16,7 +16,7 @@ const ViewUserModal: React.FC<Props> = (props) => {
   const { user, children, columns } = props;
   const [visible, setVisible] = useState(false);
 
-  const defaultColumns: ProDescriptionsItemProps<API.User>[] = [
+  const defaultColumns: ProDescriptionsItemProps<API.UserVO>[] = [
     { title: '用户ID', dataIndex: 'id', copyable: true },
     { title: '用户名', dataIndex: 'userName' },
     {
@@ -56,7 +56,7 @@ const ViewUserModal: React.FC<Props> = (props) => {
         width={800}
         destroyOnClose
       >
-        <ProDescriptions<API.User>
+        <ProDescriptions<API.UserVO>
           column={2}
           dataSource={user}
           columns={columns || defaultColumns}
