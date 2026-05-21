@@ -1,4 +1,4 @@
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Avatar, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { listUserChatRooms } from '@/services/chat/chatRoomController';
@@ -56,7 +56,7 @@ const GroupList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      sorter: true,
+      hideInSearch: true,
       width: 160,
     },
     {
@@ -91,35 +91,22 @@ const GroupList: React.FC = () => {
   ];
 
   return (
-    <>
+    <PageContainer title={false}>
       <ProTable<API.ChatRoomVO>
         headerTitle="群组管理"
         actionRef={actionRef}
         rowKey="id"
         search={{ labelWidth: 100 }}
-        request={async (params, sort) => {
+        request={async (params) => {
           const { data, code } = await listUserChatRooms();
           // 筛选群聊类型
-          let list = (data || []).filter(
-            (item) => item.type === ChatRoomTypeEnum.GROUP,
-          );
+          let list = (data || []).filter((item) => item.type === ChatRoomTypeEnum.GROUP);
 
           // 关键字搜索
           if (params?.name) {
             const keyword = String(params.name).toLowerCase();
             list = list.filter((item) => item.name?.toLowerCase().includes(keyword));
           }
-
-          // 排序
-          const sortField = Object.keys(sort)?.[0] || 'createTime';
-          const sortOrder = sort?.[sortField] ?? 'descend';
-          list.sort((a, b) => {
-            const aVal = (a as any)[sortField] || '';
-            const bVal = (b as any)[sortField] || '';
-            return sortOrder === 'ascend'
-              ? String(aVal).localeCompare(String(bVal))
-              : String(bVal).localeCompare(String(aVal));
-          });
 
           return {
             success: code === 0,
@@ -148,7 +135,7 @@ const GroupList: React.FC = () => {
           setCurrentRoomId(undefined);
         }}
       />
-    </>
+    </PageContainer>
   );
 };
 

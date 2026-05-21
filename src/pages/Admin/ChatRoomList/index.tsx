@@ -1,8 +1,9 @@
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Space, Typography, message, Avatar, Tag } from 'antd';
-import React, { useRef } from 'react';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
+import { Space, Typography, Avatar, Tag } from 'antd';
+import React, { useRef, useState } from 'react';
 import { listUserChatRooms } from '@/services/chat/chatRoomController';
 import { ChatRoomTypeEnumMap } from '@/enums/ChatRoomTypeEnum';
+import ChatRoomDetailDrawer from './components/ChatRoomDetailDrawer';
 
 /**
  * 聊天室管理列表
@@ -10,6 +11,8 @@ import { ChatRoomTypeEnumMap } from '@/enums/ChatRoomTypeEnum';
  */
 const ChatRoomList: React.FC = () => {
   const actionRef = useRef<ActionType>();
+  const [detailDrawerVisible, setDetailDrawerVisible] = useState(false);
+  const [currentRoomId, setCurrentRoomId] = useState<number>();
 
   /**
    * 表格列定义
@@ -52,7 +55,7 @@ const ChatRoomList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      sorter: true,
+      hideInSearch: true,
       width: 160,
     },
     {
@@ -60,12 +63,13 @@ const ChatRoomList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       width: 80,
-      render: () => (
+      render: (_, record) => (
         <Space size="middle">
           <Typography.Link
             key="view"
             onClick={() => {
-              message.info('详情功能开发中');
+              setCurrentRoomId(record.id);
+              setDetailDrawerVisible(true);
             }}
           >
             详情
@@ -76,22 +80,33 @@ const ChatRoomList: React.FC = () => {
   ];
 
   return (
-    <ProTable<API.ChatRoomVO>
-      headerTitle="聊天室管理"
-      actionRef={actionRef}
-      rowKey="id"
-      search={{ labelWidth: 100 }}
-      request={async () => {
-        const { data, code } = await listUserChatRooms();
-        return {
-          success: code === 0,
-          data: data || [],
-          total: data?.length || 0,
-        };
-      }}
-      columns={columns}
-      scroll={{ x: 'max-content' }}
-    />
+    <PageContainer title={false}>
+      <ProTable<API.ChatRoomVO>
+        headerTitle="聊天室管理"
+        actionRef={actionRef}
+        rowKey="id"
+        search={{ labelWidth: 100 }}
+        request={async () => {
+          const { data, code } = await listUserChatRooms();
+          return {
+            success: code === 0,
+            data: data || [],
+            total: data?.length || 0,
+          };
+        }}
+        columns={columns}
+        scroll={{ x: 'max-content' }}
+      />
+
+      <ChatRoomDetailDrawer
+        roomId={currentRoomId}
+        visible={detailDrawerVisible}
+        onClose={() => {
+          setDetailDrawerVisible(false);
+          setCurrentRoomId(undefined);
+        }}
+      />
+    </PageContainer>
   );
 };
 
