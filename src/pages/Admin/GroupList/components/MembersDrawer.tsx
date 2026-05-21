@@ -1,6 +1,7 @@
-import { Avatar, Drawer, List, Spin, Typography, Empty } from 'antd';
+import { Avatar, Drawer, Empty, List, Spin, Tag, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { listHistoryMessages } from '@/services/chat/chatMessageController';
+import { ChatRoomMemberRoleEnumMap } from '@/enums/ChatRoomMemberRoleEnum';
+import { listRoomMembers } from '@/services/chat/chatRoomController';
 
 interface Props {
   roomId?: number;
@@ -9,13 +10,10 @@ interface Props {
 }
 
 /**
- * 群成员抽屉（基于消息记录提取活跃成员）
- * 注：后端暂无群成员列表接口，使用消息历史中的发送者作为近似数据
+ * 群成员抽屉
  */
 const MembersDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => {
-  const [members, setMembers] = useState<
-    { userId: number; userName: string; userAvatar: string }[]
-  >([]);
+  const [members, setMembers] = useState<API.ChatRoomMemberVO[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,25 +25,10 @@ const MembersDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => {
     const fetchMembers = async () => {
       setLoading(true);
       try {
-        const res = await listHistoryMessages({ request: { roomId, limit: 200 } });
-        if (res.code === 0 && res.data) {
-          const memberMap = new Map<
-            number,
-            { userId: number; userName: string; userAvatar: string }
-          >();
-          (res.data as API.ChatMessageVO[]).forEach((msg) => {
-            if (msg.fromUserId && !memberMap.has(msg.fromUserId)) {
-              memberMap.set(msg.fromUserId, {
-                userId: msg.fromUserId,
-                userName: msg.fromUserName || `用户${msg.fromUserId}`,
-                userAvatar: msg.fromUserAvatar || '',
-              });
-            }
-          });
-          setMembers(Array.from(memberMap.values()));
-        }
+        const res = await listRoomMembers({ request: { roomId } });
+        setMembers(res.code === 0 && res.data ? res.data : []);
       } catch {
-        // ignore
+        setMembers([]);
       } finally {
         setLoading(false);
       }
@@ -64,8 +47,19 @@ const MembersDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => {
               <List.Item>
                 <List.Item.Meta
                   avatar={<Avatar src={item.userAvatar}>{item.userName?.[0]}</Avatar>}
-                  title={<Typography.Text>{item.userName}</Typography.Text>}
-                  description={<Typography.Text type="secondary">ID: {item.userId}</Typography.Text>}
+                  title={
+                    <span>
+                      <Typography.Text>{item.userName || `用户${item.userId}`}</Typography.Text>
+                      {item.role ? (
+                        <Tag style={{ marginInlineStart: 8 }}>
+                          {ChatRoomMemberRoleEnumMap[item.role]?.text || '未知角色'}
+                        </Tag>
+                      ) : null}
+                    </span>
+                  }
+                  description={
+                    <Typography.Text type="secondary">ID: {item.userId}</Typography.Text>
+                  }
                 />
               </List.Item>
             )}
