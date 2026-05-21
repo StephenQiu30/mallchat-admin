@@ -28,6 +28,14 @@ const CreateUserModal: React.FC<Props> = (props) => {
   // 用户头像
   const [userAvatar, setUserAvatar] = useState<string>();
   const [form] = ProForm.useForm<API.UserAddRequest>();
+
+  React.useEffect(() => {
+    if (visible) {
+      form.resetFields();
+      setUserAvatar(undefined);
+    }
+  }, [visible, form]);
+
   /**
    * 用户更新头像
    */
@@ -38,13 +46,12 @@ const CreateUserModal: React.FC<Props> = (props) => {
     customRequest: async (options: any) => {
       const { onSuccess, onError, file } = options;
       try {
-        const formData = new FormData();
-        formData.append('file', file);
         const res = await uploadFile(
           {
-            bizType: FileUploadBiz.USER_AVATAR as any,
+            bizType: FileUploadBiz.USER_AVATAR,
           },
-          file as any,
+          {},
+          file as File,
         );
         if (res.code === 0 && res.data?.url) {
           onSuccess(res.data);
@@ -82,13 +89,18 @@ const CreateUserModal: React.FC<Props> = (props) => {
       form={form}
       onFinish={async (values) => {
         try {
-          const res = await addUser({
-            ...values,
+          const submitValues: API.UserAddRequest = {
+            userName: values.userName,
             userAvatar,
-          });
+            userRole: values.userRole,
+            userEmail: values.userEmail,
+          };
+          const res = await addUser(submitValues);
           if (res.code === 0) {
             message.success('添加成功');
-            onSubmit?.(values);
+            form.resetFields();
+            setUserAvatar(undefined);
+            onSubmit?.(submitValues);
             return true;
           } else {
             message.error(`添加失败: ${res.message}`);

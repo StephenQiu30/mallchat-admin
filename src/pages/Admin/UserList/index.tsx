@@ -1,13 +1,19 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { ActionType, FooterToolbar, ProColumns, ProTable } from '@ant-design/pro-components';
+import {
+  ActionType,
+  FooterToolbar,
+  PageContainer,
+  ProColumns,
+  ProTable,
+} from '@ant-design/pro-components';
 
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import { userRole } from '@/enums/UserRoleEnum';
+import { UserRoleEnum, userRole } from '@/enums/UserRoleEnum';
 import CreateUserModal from '@/pages/Admin/UserList/components/CreateUserModal';
 import UpdateUserModal from '@/pages/Admin/UserList/components/UpdateUserModal';
 import ViewUserModal from '@/pages/Admin/UserList/components/ViewUserModal';
-import { deleteUser, listUserByPage } from '@/services/user/userController';
+import { deleteUser, listUserByPage, updateUser } from '@/services/user/userController';
 
 /**
  * 用户管理列表
@@ -30,7 +36,7 @@ const UserList: React.FC = () => {
     if (!row?.id) return;
     const hide = message.loading('正在删除');
     try {
-      const res = await deleteUser({ id: row.id as any });
+      const res = await deleteUser({ id: row.id });
       if (res.code === 0) {
         message.success('删除成功');
         actionRef.current?.reload();
@@ -52,7 +58,8 @@ const UserList: React.FC = () => {
     if (!selectedRows?.length) return;
     const hide = message.loading('正在删除');
     try {
-      const res = await Promise.all(selectedRows.map((row) => deleteUser({ id: row.id as any })));
+      const userIds = selectedRows.map((row) => row.id).filter((id): id is number => Boolean(id));
+      const res = await Promise.all(userIds.map((id) => deleteUser({ id })));
       if (res.every((r) => r.code === 0)) {
         message.success('批量删除成功');
         actionRef.current?.reloadAndRest?.();
@@ -62,6 +69,36 @@ const UserList: React.FC = () => {
       }
     } catch (error: any) {
       message.error(`批量删除报错: ${error.message}`);
+    } finally {
+      hide();
+    }
+  };
+
+  /**
+   * 封禁/解封用户
+   * @param row
+   * @param ban
+   */
+  const handleToggleBan = async (row: API.UserVO, ban: boolean) => {
+    if (!row?.id) return;
+    if (row.userRole === UserRoleEnum.ADMIN) {
+      message.warning('管理员账号不支持封禁');
+      return;
+    }
+    const hide = message.loading(ban ? '正在封禁' : '正在解封');
+    try {
+      const res = await updateUser({
+        id: row.id,
+        userRole: ban ? UserRoleEnum.BAN : UserRoleEnum.USER,
+      });
+      if (res.code === 0) {
+        message.success(ban ? '封禁成功' : '解封成功');
+        actionRef.current?.reload();
+      } else {
+        message.error(`${ban ? '封禁' : '解封'}失败: ${res.message}`);
+      }
+    } catch (error: any) {
+      message.error(`${ban ? '封禁' : '解封'}报错: ${error.message}`);
     } finally {
       hide();
     }
@@ -174,13 +211,24 @@ const UserList: React.FC = () => {
               删除
             </Typography.Link>
           </Popconfirm>
+          {record.userRole === UserRoleEnum.ADMIN ? null : record.userRole === UserRoleEnum.BAN ? (
+            <Popconfirm title="确定解封该用户？" onConfirm={() => handleToggleBan(record, false)}>
+              <Typography.Link key="unban">解封</Typography.Link>
+            </Popconfirm>
+          ) : (
+            <Popconfirm title="确定封禁该用户？" onConfirm={() => handleToggleBan(record, true)}>
+              <Typography.Link key="ban" type="danger">
+                封禁
+              </Typography.Link>
+            </Popconfirm>
+          )}
         </Space>
       ),
     },
   ];
 
   return (
-    <>
+    <PageContainer title={false}>
       <ProTable<API.UserVO, API.UserQueryRequest>
         headerTitle="用户管理"
         actionRef={actionRef}
@@ -281,7 +329,7 @@ const UserList: React.FC = () => {
           actionRef.current?.reload();
         }}
       />
-    </>
+    </PageContainer>
   );
 };
 
