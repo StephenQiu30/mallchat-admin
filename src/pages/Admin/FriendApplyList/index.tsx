@@ -1,8 +1,11 @@
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Space, Typography, message, Avatar, Popconfirm } from 'antd';
 import React, { useRef } from 'react';
 import { approveFriend, listFriendApply } from '@/services/chat/chatFriendApplyController';
-import { ChatFriendApplyStatusEnumMap, ChatFriendApplyStatusEnum } from '@/enums/ChatFriendApplyStatusEnum';
+import {
+  ChatFriendApplyStatusEnumMap,
+  ChatFriendApplyStatusEnum,
+} from '@/enums/ChatFriendApplyStatusEnum';
 
 /**
  * 好友申请管理列表
@@ -53,6 +56,7 @@ const FriendApplyList: React.FC = () => {
       dataIndex: 'userName',
       valueType: 'text',
       ellipsis: true,
+      hideInSearch: true,
     },
     {
       title: '头像',
@@ -67,19 +71,21 @@ const FriendApplyList: React.FC = () => {
       dataIndex: 'msg',
       valueType: 'text',
       ellipsis: true,
+      hideInSearch: true,
     },
     {
       title: '状态',
       dataIndex: 'status',
       valueType: 'select',
       valueEnum: ChatFriendApplyStatusEnumMap,
+      hideInSearch: true,
       width: 100,
     },
     {
       title: '申请时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      sorter: true,
+      hideInSearch: true,
       width: 160,
     },
     {
@@ -91,10 +97,16 @@ const FriendApplyList: React.FC = () => {
         <Space size="middle">
           {record.status === ChatFriendApplyStatusEnum.WAITING && (
             <>
-              <Popconfirm title="确定同意？" onConfirm={() => handleApprove(record, ChatFriendApplyStatusEnum.AGREETED)}>
+              <Popconfirm
+                title="确定同意？"
+                onConfirm={() => handleApprove(record, ChatFriendApplyStatusEnum.AGREETED)}
+              >
                 <Typography.Link key="approve">同意</Typography.Link>
               </Popconfirm>
-              <Popconfirm title="确定忽略？" onConfirm={() => handleApprove(record, ChatFriendApplyStatusEnum.IGNORED)}>
+              <Popconfirm
+                title="确定忽略？"
+                onConfirm={() => handleApprove(record, ChatFriendApplyStatusEnum.IGNORED)}
+              >
                 <Typography.Link key="ignore" type="danger">
                   忽略
                 </Typography.Link>
@@ -108,25 +120,31 @@ const FriendApplyList: React.FC = () => {
   ];
 
   return (
-    <ProTable<API.ChatFriendApplyVO>
-      headerTitle="好友申请管理"
-      actionRef={actionRef}
-      rowKey="id"
-      search={{ labelWidth: 100 }}
-      request={async (params) => {
-        const { data, code } = await listFriendApply({
-          current: params.current,
-          pageSize: params.pageSize,
-        });
-        return {
-          success: code === 0,
-          data: data?.records || [],
-          total: Number(data?.total) || 0,
-        };
-      }}
-      columns={columns}
-      scroll={{ x: 'max-content' }}
-    />
+    <PageContainer title={false}>
+      <ProTable<API.ChatFriendApplyVO, API.ChatFriendApplyQueryRequest>
+        headerTitle="好友申请管理"
+        actionRef={actionRef}
+        rowKey="id"
+        search={{ labelWidth: 100 }}
+        request={async (params, sort) => {
+          const sortField = Object.keys(sort)?.[0] || 'createTime';
+          const sortOrder = sort?.[sortField] ?? 'descend';
+          const { data, code } = await listFriendApply({
+            current: params.current,
+            pageSize: params.pageSize,
+            sortField,
+            sortOrder,
+          });
+          return {
+            success: code === 0,
+            data: data?.records || [],
+            total: Number(data?.total) || 0,
+          };
+        }}
+        columns={columns}
+        scroll={{ x: 'max-content' }}
+      />
+    </PageContainer>
   );
 };
 
