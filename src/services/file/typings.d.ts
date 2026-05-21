@@ -19,6 +19,7 @@ declare namespace API {
   };
 
   type uploadFileParams = {
+    /** 业务类型：user_avatar(用户头像)、chat_image(聊天图片)、chat_file(聊天文件)、chat_voice(聊天语音)、chat_video(聊天视频) */
     bizType: string;
   };
 }

@@ -3,7 +3,6 @@ import { useModel } from '@umijs/max';
 import React, { useState } from 'react';
 import {
   CalendarOutlined,
-  MailOutlined,
   PhoneOutlined,
   ProfileOutlined,
   UserOutlined,

@@ -84,11 +84,10 @@ declare namespace API {
     createTime?: string;
   };
 
-  type BaseResponseBoolean = {
+  type BaseResponseLogOperationResultVO = {
     /** 状态码 */
     code?: number;
-    /** 数据 */
-    data?: boolean;
+    data?: LogOperationResultVO;
     /** 消息 */
     message?: string;
   };
@@ -123,11 +122,6 @@ declare namespace API {
     data?: PageUserLoginLogVO;
     /** 消息 */
     message?: string;
-  };
-
-  type DeleteRequest = {
-    /** id */
-    id: number;
   };
 
   type FileUploadRecordAddRequest = {
@@ -221,6 +215,16 @@ declare namespace API {
     updateTime?: string;
   };
 
+  type LogIdRequest = {
+    /** 日志ID */
+    id: number;
+  };
+
+  type LogOperationResultVO = {
+    /** 是否成功 */
+    success?: boolean;
+  };
+
   type OperationLogAddRequest = {
     /** 操作人ID */
     operatorId?: number;
@@ -230,6 +234,8 @@ declare namespace API {
     module?: string;
     /** 操作类型 */
     action?: string;
+    /** 业务ID */
+    bizId?: string;
     /** HTTP方法 */
     method?: string;
     /** 请求路径 */
@@ -246,6 +252,8 @@ declare namespace API {
     clientIp?: string;
     /** 归属地 */
     location?: string;
+    /** 浏览器标识 */
+    userAgent?: string;
   };
 
   type OperationLogQueryRequest = {
@@ -267,10 +275,16 @@ declare namespace API {
     module?: string;
     /** 操作类型 */
     action?: string;
+    /** 业务ID */
+    bizId?: string;
     /** 是否成功 */
     success?: number;
     /** 客户端IP */
     clientIp?: string;
+    /** 开始时间 */
+    startTime?: string;
+    /** 结束时间 */
+    endTime?: string;
     /** 搜索文本 */
     searchText?: string;
   };
@@ -286,6 +300,8 @@ declare namespace API {
     module?: string;
     /** 操作类型 */
     action?: string;
+    /** 业务ID */
+    bizId?: string;
     /** HTTP方法 */
     method?: string;
     /** 请求路径 */

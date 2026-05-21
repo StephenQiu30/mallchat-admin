@@ -1,7 +1,7 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-components';
 import React from 'react';
-import { STEPHEN_AUTHOR, STEPHEN_DEFAULT_MESSAGE, STEPHEN_GITHUB } from '@/constants';
+import { STEPHEN_DEFAULT_MESSAGE, STEPHEN_GITHUB } from '@/constants';
 
 const Footer: React.FC = () => {
   const defaultMessage = STEPHEN_DEFAULT_MESSAGE;

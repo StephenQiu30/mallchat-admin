@@ -5,9 +5,9 @@ import { NotificationTypeEnumMap } from '@/enums/NotificationTypeEnum';
 import { NotificationReadStatusEnumMap } from '@/enums/NotificationReadStatusEnum';
 
 interface Props {
-  notification: API.Notification;
+  notification: API.NotificationVO;
   children?: React.ReactElement;
-  columns?: ProDescriptionsItemProps<API.Notification>[];
+  columns?: ProDescriptionsItemProps<API.NotificationVO>[];
 }
 
 /**
@@ -17,7 +17,7 @@ const ViewNotificationModal: React.FC<Props> = (props) => {
   const { notification, children, columns } = props;
   const [visible, setVisible] = useState(false);
 
-  const defaultColumns: ProDescriptionsItemProps<API.Notification>[] = [
+  const defaultColumns: ProDescriptionsItemProps<API.NotificationVO>[] = [
     { title: '通知ID', dataIndex: 'id', copyable: true },
     { title: '标题', dataIndex: 'title' },
     {
@@ -68,7 +68,7 @@ const ViewNotificationModal: React.FC<Props> = (props) => {
         width={700}
         destroyOnClose
       >
-        <ProDescriptions<API.Notification>
+        <ProDescriptions<API.NotificationVO>
           column={1}
           dataSource={notification}
           columns={columns || defaultColumns}

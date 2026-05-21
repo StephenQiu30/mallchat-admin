@@ -2,12 +2,12 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** 申请好友 发起好友添加申请 POST /chat_friend_apply/add */
+/** 申请好友 向目标用户发起好友添加申请 POST /chat/friend/apply/add */
 export async function applyFriend(
   body: API.ChatFriendApplyRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseLong>('/chat_friend_apply/add', {
+  return request<API.BaseResponseChatIdVO>('/chat/friend/apply/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,12 +17,12 @@ export async function applyFriend(
   });
 }
 
-/** 审核好友 同意或拒绝好友申请 POST /chat_friend_apply/approve */
+/** 审核好友 同意或拒绝好友申请，同意后将自动建立双向好友关系并创建私聊房间 POST /chat/friend/apply/approve */
 export async function approveFriend(
   body: API.ChatFriendApproveRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean>('/chat_friend_apply/approve', {
+  return request<API.BaseResponseChatOperationResultVO>('/chat/friend/apply/approve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,21 +32,17 @@ export async function approveFriend(
   });
 }
 
-/** 好友申请列表 获取当前收到的好友申请记录 GET /chat_friend_apply/list/vo */
+/** 好友申请列表 获取当前收到的好友申请记录 POST /chat/friend/apply/list/page/vo */
 export async function listFriendApply(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listFriendApplyParams,
+  body: API.ChatFriendApplyQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePageChatFriendApplyVO>('/chat_friend_apply/list/vo', {
-    method: 'GET',
-    params: {
-      // current has a default value: 1
-      current: '1',
-      // size has a default value: 10
-      size: '10',
-      ...params,
+  return request<API.BaseResponsePageChatFriendApplyVO>('/chat/friend/apply/list/page/vo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
     ...(options || {}),
   });
 }

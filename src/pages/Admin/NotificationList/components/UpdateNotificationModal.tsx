@@ -10,7 +10,7 @@ import { updateNotification } from '@/services/notification/notificationControll
 import { message } from 'antd';
 
 interface Props {
-  oldData?: API.Notification;
+  oldData?: API.NotificationVO;
   onCancel: () => void;
   onSubmit: () => void;
   visible: boolean;

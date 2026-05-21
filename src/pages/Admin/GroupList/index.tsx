@@ -1,5 +1,5 @@
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Avatar, Space, Typography, message, Tag } from 'antd';
+import { Avatar, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { listUserChatRooms } from '@/services/chat/chatRoomController';
 import { ChatRoomTypeEnum, ChatRoomTypeEnumMap } from '@/enums/ChatRoomTypeEnum';
@@ -97,7 +97,7 @@ const GroupList: React.FC = () => {
         actionRef={actionRef}
         rowKey="id"
         search={{ labelWidth: 100 }}
-        request={async (params, sort, filter) => {
+        request={async (params, sort) => {
           const { data, code } = await listUserChatRooms();
           // 筛选群聊类型
           let list = (data || []).filter(

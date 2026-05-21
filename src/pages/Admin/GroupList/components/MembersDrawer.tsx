@@ -27,7 +27,7 @@ const MembersDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => {
     const fetchMembers = async () => {
       setLoading(true);
       try {
-        const res = await listHistoryMessages({ roomId, limit: 200 });
+        const res = await listHistoryMessages({ request: { roomId, limit: 200 } });
         if (res.code === 0 && res.data) {
           const memberMap = new Map<
             number,
