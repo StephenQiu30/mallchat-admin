@@ -17,6 +17,30 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseUserAdminStatusVO = {
+    /** 状态码 */
+    code?: number;
+    data?: UserAdminStatusVO;
+    /** 消息 */
+    message?: string;
+  };
+
+  type BaseResponseUserIdVO = {
+    /** 状态码 */
+    code?: number;
+    data?: UserIdVO;
+    /** 消息 */
+    message?: string;
+  };
+
+  type BaseResponseUserOperationResultVO = {
+    /** 状态码 */
+    code?: number;
+    data?: UserOperationResultVO;
+    /** 消息 */
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO = {
     /** 状态码 */
     code?: number;
@@ -201,6 +225,11 @@ declare namespace API {
     userEmail?: string;
   };
 
+  type UserAdminStatusVO = {
+    /** 是否管理员 */
+    admin?: boolean;
+  };
+
   type UserEditRequest = {
     /** 用户昵称 */
     userName?: string;
@@ -224,6 +253,21 @@ declare namespace API {
     email?: string;
     /** 验证码 */
     code?: string;
+  };
+
+  type UserIdRequest = {
+    /** 用户ID */
+    id: number;
+  };
+
+  type UserIdsRequest = {
+    /** 用户ID列表 */
+    ids: number[];
+  };
+
+  type UserIdVO = {
+    /** 用户ID */
+    id?: number;
   };
 
   type UserQueryRequest = {
@@ -251,6 +295,11 @@ declare namespace API {
     userPhone?: string;
     /** 搜索文本 */
     searchText?: string;
+  };
+
+  type UserOperationResultVO = {
+    /** 是否成功 */
+    success?: boolean;
   };
 
   type UserUpdateRequest = {
