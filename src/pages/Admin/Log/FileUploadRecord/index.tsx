@@ -7,7 +7,7 @@ import {
 } from '@/services/log/fileUploadRecordController';
 import { FileUploadStatusEnumMap } from '@/enums/FileUploadStatusEnum';
 import ViewFileUploadRecordModal from './components/ViewFileUploadRecordModal';
-import { FileUploadBiz } from '@/enums/FileUploadBizEnum';
+import { FileUploadBizEnumMap } from '@/enums/FileUploadBizEnum';
 
 /**
  * 文件上传记录页面
@@ -63,11 +63,7 @@ const FileUploadRecord: React.FC = () => {
       title: '业务类型',
       dataIndex: 'bizType',
       width: 120,
-      valueEnum: {
-        [FileUploadBiz.USER_AVATAR]: { text: '用户头像', status: 'Default' },
-        [FileUploadBiz.POST_COVER]: { text: '帖子封面', status: 'Default' },
-        [FileUploadBiz.POST_IMAGE_COVER]: { text: '图片帖子封面', status: 'Default' },
-      },
+      valueEnum: FileUploadBizEnumMap,
     },
     { title: '文件名', dataIndex: 'fileName', ellipsis: true },
     {

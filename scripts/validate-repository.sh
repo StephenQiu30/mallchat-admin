@@ -30,3 +30,4 @@ grep -q "Test-first Evidence" .github/pull_request_template.md
 git diff --check
 node scripts/verify-admin-foundation.cjs
 node scripts/verify-admin-user-relation.cjs
+node scripts/verify-admin-enum-display.cjs
