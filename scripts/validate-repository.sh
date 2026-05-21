@@ -28,3 +28,4 @@ grep -q "npm test" AGENTS.md
 grep -q "Test-first Evidence" .github/pull_request_template.md
 
 git diff --check
+node scripts/verify-admin-foundation.cjs
