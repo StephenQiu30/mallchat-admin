@@ -1,5 +1,6 @@
-import { Avatar, Button, Drawer, List, Spin, Typography } from 'antd';
+import { Avatar, Button, Drawer, List, Spin, Tag, Typography } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
+import { ChatMessageTypeEnum, ChatMessageTypeEnumMap } from '@/enums/ChatMessageTypeEnum';
 import { listHistoryMessages } from '@/services/chat/chatMessageController';
 
 interface Props {
@@ -60,27 +61,8 @@ const MessageHistoryDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => 
     }
   };
 
-  const getMessageTypeLabel = (type?: number) => {
-    switch (type) {
-      case 1:
-        return '';
-      case 2:
-        return '[图片]';
-      case 3:
-        return '[文件]';
-      default:
-        return '';
-    }
-  };
-
   return (
-    <Drawer
-      title="群消息记录"
-      open={visible}
-      onClose={onClose}
-      width={520}
-      destroyOnClose
-    >
+    <Drawer title="群消息记录" open={visible} onClose={onClose} width={520} destroyOnClose>
       <Spin spinning={loading && messages.length === 0}>
         <List
           dataSource={messages}
@@ -89,14 +71,17 @@ const MessageHistoryDrawer: React.FC<Props> = ({ roomId, visible, onClose }) => 
               <List.Item.Meta
                 avatar={<Avatar src={item.fromUserAvatar}>{item.fromUserName?.[0]}</Avatar>}
                 title={
-                  <Typography.Text>
-                    {item.fromUserName || `用户${item.fromUserId}`}
-                  </Typography.Text>
+                  <Typography.Text>{item.fromUserName || `用户${item.fromUserId}`}</Typography.Text>
                 }
                 description={
                   <div>
                     <div style={{ wordBreak: 'break-all' }}>
-                      {getMessageTypeLabel(item.type)}
+                      {item.type && item.type !== ChatMessageTypeEnum.TEXT ? (
+                        <Tag>
+                          {ChatMessageTypeEnumMap[item.type as ChatMessageTypeEnum]?.text ||
+                            '未知类型'}
+                        </Tag>
+                      ) : null}
                       {item.content}
                     </div>
                     <Typography.Text type="secondary" style={{ fontSize: 12 }}>
